@@ -30,6 +30,14 @@ SplashScreen.preventAutoHideAsync();
 export default function RootLayout() {
   const [loaded, error] = useFonts({
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
+    "InstrumentSans-Bold": require("../assets/fonts/InstrumentSans-Bold.ttf"),
+    "InstrumentSans-BoldItalic": require("../assets/fonts/InstrumentSans-BoldItalic.ttf"),
+    "InstrumentSans-Medium": require("../assets/fonts/InstrumentSans-Medium.ttf"),
+    "InstrumentSans-Regular": require("../assets/fonts/InstrumentSans-Regular.ttf"),
+    "InstrumentSans-SemiBoldItalic": require("../assets/fonts/InstrumentSans-SemiBoldItalic.ttf"),
+    "InstrumentSans-SemiBold": require("../assets/fonts/InstrumentSans-SemiBold.ttf"),
+    "InstrumentSans-MediumItalic": require("../assets/fonts/InstrumentSans-MediumItalic.ttf"),
+    "InstrumentSans-Italic": require("../assets/fonts/InstrumentSans-Italic.ttf"),
     ...FontAwesome.font,
   });
 
