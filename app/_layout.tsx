@@ -7,10 +7,11 @@ import {
   ThemeProvider,
 } from "@react-navigation/native";
 import { useFonts } from "expo-font";
-import { Stack } from "expo-router";
+import { Stack, Redirect } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import "react-native-reanimated";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { useColorScheme } from "@/components/useColorScheme";
 
@@ -65,11 +66,22 @@ export default function RootLayout() {
 
 function RootLayoutNav() {
   const colorScheme = useColorScheme();
+  const [initialRoute, setInitialRoute] = useState<string | null>(null);
+
+  useEffect(() => {
+    const checkLoginStatus = async () => {
+      const isLoggedIn = await AsyncStorage.getItem("loggedIn");
+      setInitialRoute(isLoggedIn === "true" ? "(tabs)" : "(auth)");
+    };
+    checkLoginStatus();
+  }, []);
+
+  if (initialRoute === null) return null;
 
   return (
     <GluestackUIProvider mode="light">
       <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-        <Stack>
+        <Stack initialRouteName={initialRoute}>
           {/* <Stack.Screen name="(tabs)" options={{ headerShown: false }} /> */}
           <Stack.Screen
             name="(auth)"
@@ -77,6 +89,7 @@ function RootLayoutNav() {
               headerShown: false,
             }}
           />
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
           <Stack.Screen name="modal" options={{ presentation: "modal" }} />
         </Stack>
       </ThemeProvider>

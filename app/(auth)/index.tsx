@@ -5,12 +5,22 @@ import {
   SafeAreaView,
   TouchableOpacity,
 } from "react-native";
+import { useRouter } from "expo-router";
 
 // import Text from "@/components/Text";
 
 const book = require("../../assets/images/books.png");
 
 export default function WelcomeScreen() {
+  const router = useRouter();
+
+  const handleSignIn = () => {
+    router.push("/sign-in");
+  };
+
+  const handleSignUp = () => {
+    router.push("/sign-up");
+  };
   return (
     <SafeAreaView className="flex-1">
       <View className="flex-1">
@@ -32,12 +42,18 @@ export default function WelcomeScreen() {
           </View>
 
           <View className="flex-row justify-between mt-6">
-            <TouchableOpacity className=" px-10 py-2 rounded-full border border-white mt-8">
+            <TouchableOpacity
+              className=" px-10 py-2 rounded-full border border-white mt-8"
+              onPress={handleSignIn}
+            >
               <Text className="text-[12px] font-bold font-instrument_bold text-white py-4 px-8">
                 Sign In
               </Text>
             </TouchableOpacity>
-            <TouchableOpacity className="bg-white px-10 py-2 rounded-full mt-8">
+            <TouchableOpacity
+              className="bg-white px-10 py-2 rounded-full mt-8"
+              onPress={handleSignUp}
+            >
               <Text className="text-[12px] font-bold font-instrument_bold py-4 px-8">
                 Sign Up
               </Text>
