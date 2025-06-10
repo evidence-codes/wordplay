@@ -1,3 +1,4 @@
+import { useRouter } from "expo-router";
 import {
   Image,
   SafeAreaView,
@@ -5,9 +6,13 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
 
 export default function Puzzle() {
+  const router = useRouter();
+
+  const handleStartBasic = () => {
+    router.navigate("/(tabs)/puzzle/basic");
+  };
   return (
     <SafeAreaView className="bg-white flex-1">
       <View className="bg-[#3E3BEE]">
@@ -20,7 +25,7 @@ export default function Puzzle() {
         <View className="flex-row items-center justify-between px-8 py-4 gap-4">
           <View className="flex-shrink-0">
             <Image
-              source={require("../../assets/images/game-3.png")}
+              source={require("../../../assets/images/game-3.png")}
               className="w-[200px] h-[150px]"
             />
           </View>
@@ -33,7 +38,7 @@ export default function Puzzle() {
               These puzzles include everyday words, simple spellings, and
               commonly used terms to build foundational vocabulary.
             </Text>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={handleStartBasic}>
               <View className="w-[120px] rounded-[5px] bg-[#3E3BEE]">
                 <Text className="text-white text-center text-[12px] font-instrument_semibold py-2">
                   Start Puzzle
@@ -46,7 +51,7 @@ export default function Puzzle() {
         <View className="flex-row items-center justify-between px-8 py-4 gap-4">
           <View className="flex-shrink-0">
             <Image
-              source={require("../../assets/images/game-2.png")}
+              source={require("../../../assets/images/game-2.png")}
               className="w-[200px] h-[150px]"
             />
           </View>
@@ -72,7 +77,7 @@ export default function Puzzle() {
         <View className="flex-row items-center justify-between px-8 py-4 gap-4">
           <View className="flex-shrink-0">
             <Image
-              source={require("../../assets/images/game-1.png")}
+              source={require("../../../assets/images/game-1.png")}
               className="w-[200px] h-[150px]"
             />
           </View>
