@@ -1,13 +1,57 @@
 import { SafeAreaView, View, Text, Image } from "react-native";
+import { useEffect, useState } from "react";
+import { authService } from "@/utils/authService";
+import { progressService } from "@/utils/progressService";
 
 export default function Home() {
+  const [userName, setUserName] = useState("");
+  const [greeting, setGreeting] = useState("");
+  const [xp, setXP] = useState(0);
+  const [streak, setStreak] = useState(0);
+
+  useEffect(() => {
+    const getGreeting = () => {
+      const hour = new Date().getHours();
+      if (hour >= 5 && hour < 12) {
+        return "Good Morning";
+      } else if (hour >= 12 && hour < 17) {
+        return "Good Afternoon";
+      } else {
+        return "Good Evening";
+      }
+    };
+
+    const loadUserData = async () => {
+      const user = await authService.getCurrentUser();
+      if (user?.fullName) {
+        setUserName(user.fullName.split(" ")[0]); // Get first name
+      }
+      setGreeting(getGreeting());
+
+      const progress = await progressService.getProgress();
+      if (progress) {
+        setXP(progress.totalXP);
+        setStreak(progress.streak);
+      }
+    };
+
+    loadUserData();
+
+    // Update greeting every minute
+    const intervalId = setInterval(() => {
+      setGreeting(getGreeting());
+    }, 60000);
+
+    return () => clearInterval(intervalId);
+  }, []);
+
   return (
     <SafeAreaView className="bg-white flex-1">
       <View className="bg-[#3E3BEE] px-10">
         <View className="pt-16 flex-row items-center justify-between">
           <View>
             <Text className="text-[36px] font-instrument_bold text-white">
-              Hi, James
+              Hi, {userName || "Guest"}
             </Text>
           </View>
           <View>
@@ -19,7 +63,7 @@ export default function Home() {
         </View>
         <View>
           <Text className="text-[16px] font-instrument_regular text-white">
-            Good Afternoon
+            {greeting}
           </Text>
         </View>
 
@@ -31,7 +75,7 @@ export default function Home() {
               Score
             </Text>
             <Text className="text-[30px] text-white font-instrument_bold">
-              334 XP
+              {xp} XP
             </Text>
           </View>
           <View>
@@ -39,7 +83,7 @@ export default function Home() {
               Streak
             </Text>
             <Text className="text-[30px] text-white font-instrument_bold">
-              27 Days
+              {streak} Days
             </Text>
           </View>
         </View>

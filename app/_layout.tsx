@@ -7,7 +7,7 @@ import {
   ThemeProvider,
 } from "@react-navigation/native";
 import { useFonts } from "expo-font";
-import { Stack, Redirect } from "expo-router";
+import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect, useState } from "react";
 import "react-native-reanimated";
@@ -70,33 +70,27 @@ function RootLayoutNav() {
 
   useEffect(() => {
     const checkLoginStatus = async () => {
-      const isLoggedIn = await AsyncStorage.getItem("loggedIn");
-      setInitialRoute(isLoggedIn === "true" ? "(tabs)" : "(auth)");
+      try {
+        const isLoggedIn = await AsyncStorage.getItem("loggedIn");
+        setInitialRoute(isLoggedIn === "true" ? "(tabs)" : "(auth)");
+      } catch (error) {
+        console.error("Error checking login status:", error);
+        setInitialRoute("(auth)"); // Default to auth if there's an error
+      }
     };
+
     checkLoginStatus();
   }, []);
 
   if (initialRoute === null) return null;
 
   return (
-    <GluestackUIProvider mode="light">
-      <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-        <Stack initialRouteName={initialRoute}>
-          {/* <Stack.Screen name="(tabs)" options={{ headerShown: false }} /> */}
-          <Stack.Screen
-            name="(auth)"
-            options={{
-              headerShown: false,
-            }}
-          />
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen
-            name="(game-screens)"
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen name="modal" options={{ presentation: "modal" }} />
-        </Stack>
-      </ThemeProvider>
-    </GluestackUIProvider>
+    <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+      <Stack initialRouteName={initialRoute}>
+        <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="(game-screens)" options={{ headerShown: false }} />
+      </Stack>
+    </ThemeProvider>
   );
 }

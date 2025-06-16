@@ -14,6 +14,7 @@ import { Ionicons } from "@expo/vector-icons";
 import Svg, { Path } from "react-native-svg";
 import { LinearGradient } from "expo-linear-gradient";
 import GameModal from "@/components/GameModal"; // Adjust the import based on your file structure
+import { progressService } from "@/utils/progressService"; // Adjust the import based on your file structure
 
 // Sample dictionary words
 const wordList = ["TEAM", "THIS", "SEAS", "STAT", "MATS"];
@@ -248,10 +249,17 @@ export default function BasicGameScreen() {
     return `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
   };
 
+  const handleGameComplete = async () => {
+    const gameXP = validWords.length * 45;
+    await progressService.updateXP("basic", gameXP);
+    await progressService.updateStreak();
+  };
+
   // Update the success check to set end time when all words are found
   useEffect(() => {
     if (validWords.length === wordList.length) {
       setEndTime(Date.now());
+      handleGameComplete();
       setShowSuccessModal(true);
     }
   }, [validWords]);
