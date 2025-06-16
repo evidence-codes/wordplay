@@ -8,17 +8,57 @@ import {
   TouchableOpacity,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useState } from "react";
+import { authService } from "@/utils/authService";
 
 export default function SignIn() {
   const router = useRouter();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [errors, setErrors] = useState({
+    email: "",
+    password: "",
+  });
+
+  const validateForm = () => {
+    let isValid = true;
+    const newErrors = { email: "", password: "" };
+
+    if (!email) {
+      newErrors.email = "Email is required";
+      isValid = false;
+    } else if (!/\S+@\S+\.\S+/.test(email)) {
+      newErrors.email = "Please enter a valid email";
+      isValid = false;
+    }
+
+    if (!password) {
+      newErrors.password = "Password is required";
+      isValid = false;
+    }
+
+    setErrors(newErrors);
+    return isValid;
+  };
 
   const handleSignIn = async () => {
+    if (!validateForm()) return;
+
     try {
-      // Save token or login flag
-      await AsyncStorage.setItem("loggedIn", "true");
-      router.push("/(tabs)");
+      const success = await authService.login(email, password);
+      if (success) {
+        await AsyncStorage.setItem("loggedIn", "true");
+        router.push("/(tabs)");
+      } else {
+        setErrors({
+          email: "Invalid email or password",
+          password: "Invalid email or password",
+        });
+      }
     } catch (error) {
-      console.log("Failed to save login status", error);
+      console.log("Login failed", error);
+      setError("An error occurred");
     }
   };
 
@@ -55,20 +95,38 @@ export default function SignIn() {
               Email
             </Text>
             <TextInput
-              className="h-[50px] bg-[#F5F5F5] rounded-[10px] px-4"
+              value={email}
+              onChangeText={setEmail}
+              className={`h-[50px] bg-[#F5F5F5] rounded-[10px] px-4 ${
+                errors.email ? "border border-red-500" : ""
+              }`}
               keyboardType="email-address"
             />
+            {errors.email ? (
+              <Text className="text-red-500 text-[12px] mt-1">
+                {errors.email}
+              </Text>
+            ) : null}
           </View>
           <View className="mb-4">
             <Text className="text-[14px] font-instrument_semibold text-[#333333] py-[4px]">
               Password
             </Text>
             <TextInput
-              className="h-[50px] bg-[#F5F5F5] rounded-[10px] px-4"
+              value={password}
+              onChangeText={setPassword}
+              className={`h-[50px] bg-[#F5F5F5] rounded-[10px] px-4 ${
+                errors.password ? "border border-red-500" : ""
+              }`}
               keyboardType="default"
               textContentType="password"
               secureTextEntry={true}
             />
+            {errors.password ? (
+              <Text className="text-red-500 text-[12px] mt-1">
+                {errors.password}
+              </Text>
+            ) : null}
           </View>
           <View className="self-end">
             <Text
