@@ -11,7 +11,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useState } from "react";
 import { authService } from "@/utils/authService";
 
-export default function SignIn() {
+function SignIn() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -164,3 +164,5 @@ export default function SignIn() {
     </SafeAreaView>
   );
 }
+
+export default SignIn;

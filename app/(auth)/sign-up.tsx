@@ -11,7 +11,7 @@ import {
 import { useState } from "react";
 import { authService } from "@/utils/authService";
 
-export default function SignUp() {
+function SignUp() {
   const router = useRouter();
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
@@ -216,3 +216,5 @@ export default function SignUp() {
     </SafeAreaView>
   );
 }
+
+export default SignUp;

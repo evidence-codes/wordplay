@@ -62,7 +62,7 @@ const isValidMove = (
   );
 };
 
-export default function BasicGameScreen() {
+function BasicGame() {
   const router = useRouter();
   const [selectedLetters, setSelectedLetters] = useState<string[]>([]);
   const [selectedCoords, setSelectedCoords] = useState<
@@ -432,3 +432,5 @@ export default function BasicGameScreen() {
     </SafeAreaView>
   );
 }
+
+export default BasicGame;

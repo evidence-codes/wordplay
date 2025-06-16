@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { authService } from "@/utils/authService";
 import { progressService } from "@/utils/progressService";
 
-export default function Home() {
+function Home() {
   const [userName, setUserName] = useState("");
   const [greeting, setGreeting] = useState("");
   const [xp, setXP] = useState(0);
@@ -93,3 +93,5 @@ export default function Home() {
     </SafeAreaView>
   );
 }
+
+export default Home;
