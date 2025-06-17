@@ -3,6 +3,7 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Stack, Tabs } from "expo-router";
 import { StatusBar } from "react-native";
+import { Platform } from "react-native";
 
 import Colors from "@/constants/Colors";
 import { useColorScheme } from "@/components/useColorScheme";
@@ -28,6 +29,25 @@ export default function TabLayout() {
           // Disable the static render of the header on web
           // to prevent a hydration error in React Navigation v6.
           headerShown: useClientOnlyValue(false, true),
+          tabBarStyle: {
+            height: Platform.OS === "android" ? 70 : 85, // Increased height for iOS
+            paddingBottom: Platform.OS === "android" ? 10 : 25, // Added bottom padding for iOS
+            paddingTop: Platform.OS === "android" ? 5 : 10, // Added top padding for iOS
+            backgroundColor: "#fff",
+            borderTopWidth: 1,
+            borderTopColor: "#eee",
+          },
+          tabBarLabelStyle: {
+            fontFamily: "InstrumentSans-Regular",
+            fontSize: 12,
+            paddingBottom: Platform.OS === "android" ? 5 : 8, // Increased padding for iOS
+          },
+          tabBarIconStyle:
+            Platform.OS === "ios"
+              ? {
+                  marginTop: 5,
+                }
+              : undefined,
         }}
       >
         <Tabs.Screen

@@ -72,7 +72,7 @@ const GameModal = ({
             <Text
               className={`text-[36px] ${
                 isSuccess ? "text-[#3E3BEE]" : "text-[#FF1214]"
-              } font-[700] font-instrument_semibold text-center leading-[100%]`}
+              } font-instrument_semibold text-center leading-[100%]`}
               // className=
               style={{ letterSpacing: 0.5 }}
             >

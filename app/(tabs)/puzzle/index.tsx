@@ -5,6 +5,8 @@ import {
   Text,
   TouchableOpacity,
   View,
+  ScrollView,
+  Platform,
 } from "react-native";
 
 export default function Puzzle() {
@@ -21,85 +23,131 @@ export default function Puzzle() {
         </Text>
       </View>
 
-      <View>
-        <View className="flex-row items-center justify-between px-8 py-4 gap-4">
-          <View className="flex-shrink-0">
-            <Image
-              source={require("../../../assets/images/game-3.png")}
-              className="w-[200px] h-[150px]"
-            />
+      <ScrollView className="flex-1">
+        <View
+          className={`gap-2 ${Platform.OS === "android" ? "pb-20" : "pb-4"}`}
+        >
+          {/* Basic Level */}
+          <View className="flex-row px-4 py-4 gap-2">
+            <View className="flex-shrink-0 justify-center">
+              <Image
+                source={require("../../../assets/images/game-3.png")}
+                className={`${
+                  Platform.OS === "android"
+                    ? "w-[150px] h-[130px]" // Increased height on Android
+                    : "w-[200px] h-[150px]"
+                }`}
+                resizeMode="contain"
+              />
+            </View>
+            <View className="flex-1 px-2">
+              <Text className="text-[14px] text-[#333333] font-instrument_semibold">
+                Basic Vocabulary
+              </Text>
+              <Text
+                className={`text-[10px] font-instrument_regular text-[#666666] flex-wrap py-2 ${
+                  Platform.OS === "android" ? "pr-2" : "py-4"
+                }`}
+              >
+                Start here if you're new to English or want a light challenge.
+                These puzzles include everyday words, simple spellings, and
+                commonly used terms to build foundational vocabulary.
+              </Text>
+              <TouchableOpacity onPress={handleStartBasic}>
+                <View
+                  className={`w-[120px] rounded-[5px] bg-[#3E3BEE] ${
+                    Platform.OS === "android" ? "mb-2" : ""
+                  }`}
+                >
+                  <Text className="text-white text-center text-[12px] font-instrument_semibold py-2">
+                    Start Puzzle
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            </View>
           </View>
-          <View className="flex-1">
-            <Text className="text-[14px] font-[700] text-[#333333] font-instrument_semibold">
-              Basic Vocabulary
-            </Text>
-            <Text className="text-[10px] font-instrument_regular text-[#666666] flex-wrap py-4">
-              Start here if you're new to English or want a light challenge.
-              These puzzles include everyday words, simple spellings, and
-              commonly used terms to build foundational vocabulary.
-            </Text>
-            <TouchableOpacity onPress={handleStartBasic}>
-              <View className="w-[120px] rounded-[5px] bg-[#3E3BEE]">
-                <Text className="text-white text-center text-[12px] font-instrument_semibold py-2">
-                  Start Puzzle
-                </Text>
-              </View>
-            </TouchableOpacity>
-          </View>
-        </View>
 
-        <View className="flex-row items-center justify-between px-8 py-4 gap-4">
-          <View className="flex-shrink-0">
-            <Image
-              source={require("../../../assets/images/game-2.png")}
-              className="w-[200px] h-[150px]"
-            />
+          {/* Moderate Level */}
+          <View className="flex-row px-4 py-4 gap-2">
+            <View className="flex-shrink-0 justify-center">
+              <Image
+                source={require("../../../assets/images/game-2.png")}
+                className={`${
+                  Platform.OS === "android"
+                    ? "w-[150px] h-[130px]" // Increased height on Android
+                    : "w-[200px] h-[150px]"
+                }`}
+                resizeMode="contain"
+              />
+            </View>
+            <View className="flex-1 px-2">
+              <Text className="text-[14px] text-[#333333] font-instrument_semibold">
+                Moderate Level
+              </Text>
+              <Text
+                className={`text-[10px] font-instrument_regular text-[#666666] flex-wrap py-2 ${
+                  Platform.OS === "android" ? "pr-2" : "py-4"
+                }`}
+              >
+                Ready to level up? These puzzles include moderately challenging
+                words, synonyms, and antonyms that help expand your vocabulary
+                and understanding of word relationships.
+              </Text>
+              <TouchableOpacity>
+                <View
+                  className={`w-[120px] rounded-[5px] bg-[#3E3BEE] ${
+                    Platform.OS === "android" ? "mb-2" : ""
+                  }`}
+                >
+                  <Text className="text-white text-center text-[12px] font-instrument_semibold py-2">
+                    Start Puzzle
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            </View>
           </View>
-          <View className="flex-1">
-            <Text className="text-[14px] font-[700] text-[#333333] font-instrument_semibold">
-              Moderate Level
-            </Text>
-            <Text className="text-[10px] font-instrument_regular text-[#666666] flex-wrap py-4">
-              Ready to level up? These puzzles include moderately challenging
-              words, synonyms, and antonyms that help expand your vocabulary and
-              understanding of word relationships.
-            </Text>
-            <TouchableOpacity>
-              <View className="w-[120px] rounded-[5px] bg-[#3E3BEE]">
-                <Text className="text-white text-center text-[12px] font-instrument_semibold py-2">
-                  Start Puzzle
-                </Text>
-              </View>
-            </TouchableOpacity>
-          </View>
-        </View>
 
-        <View className="flex-row items-center justify-between px-8 py-4 gap-4">
-          <View className="flex-shrink-0">
-            <Image
-              source={require("../../../assets/images/game-1.png")}
-              className="w-[200px] h-[150px]"
-            />
-          </View>
-          <View className="flex-1">
-            <Text className="text-[14px] font-[700] text-[#333333] font-instrument_semibold">
-              Advanced Words
-            </Text>
-            <Text className="text-[10px] font-instrument_regular text-[#666666] flex-wrap py-4">
-              Designed for advanced learners and word enthusiasts. Expect rare,
-              academic, or complex vocabulary, with a focus on precision,
-              phonetics, and contextual understanding.
-            </Text>
-            <TouchableOpacity>
-              <View className="w-[120px] rounded-[5px] bg-[#3E3BEE]">
-                <Text className="text-white text-center text-[12px] font-instrument_semibold py-2">
-                  Start Puzzle
-                </Text>
-              </View>
-            </TouchableOpacity>
+          {/* Advanced Level */}
+          <View className="flex-row px-4 py-4 gap-2">
+            <View className="flex-shrink-0 justify-center">
+              <Image
+                source={require("../../../assets/images/game-1.png")}
+                className={`${
+                  Platform.OS === "android"
+                    ? "w-[150px] h-[130px]" // Increased height on Android
+                    : "w-[200px] h-[150px]"
+                }`}
+                resizeMode="contain"
+              />
+            </View>
+            <View className="flex-1 px-2">
+              <Text className="text-[14px] text-[#333333] font-instrument_semibold">
+                Advanced Words
+              </Text>
+              <Text
+                className={`text-[10px] font-instrument_regular text-[#666666] flex-wrap py-2 ${
+                  Platform.OS === "android" ? "pr-2" : "py-4"
+                }`}
+              >
+                Designed for advanced learners and word enthusiasts. Expect
+                rare, academic, or complex vocabulary, with a focus on
+                precision, phonetics, and contextual understanding.
+              </Text>
+              <TouchableOpacity>
+                <View
+                  className={`w-[120px] rounded-[5px] bg-[#3E3BEE] ${
+                    Platform.OS === "android" ? "mb-2" : ""
+                  }`}
+                >
+                  <Text className="text-white text-center text-[12px] font-instrument_semibold py-2">
+                    Start Puzzle
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }

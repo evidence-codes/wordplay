@@ -9,6 +9,7 @@ import {
   LayoutChangeEvent,
   Modal,
   Image,
+  Platform,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import Svg, { Path } from "react-native-svg";
@@ -62,7 +63,7 @@ const isValidMove = (
   );
 };
 
-function BasicGame() {
+export default function BasicGame() {
   const router = useRouter();
   const [selectedLetters, setSelectedLetters] = useState<string[]>([]);
   const [selectedCoords, setSelectedCoords] = useState<
@@ -317,8 +318,10 @@ function BasicGame() {
 
           {/* Selected Word */}
           <View
-            className={`w-[210px] h-[50px] rounded-[5px] mx-auto mb-4 
-  ${validWords.includes(word) ? "bg-[#FFBB32]" : "bg-[#666666]"}`}
+            className={`w-[210px] h-[50px] rounded-[5px] mx-auto ${
+              Platform.OS === "android" ? "mb-2" : "mb-4"
+            }
+              ${validWords.includes(word) ? "bg-[#FFBB32]" : "bg-[#666666]"}`}
           >
             <Text className="text-white font-instrument_bold text-[36px] text-center">
               {word}
@@ -326,9 +329,18 @@ function BasicGame() {
           </View>
 
           {/* Puzzle Grid */}
-          <View className="items-center px-4 mt-8">
+          <View
+            className={`items-center px-4 ${
+              Platform.OS === "android" ? "mt-4" : "mt-8"
+            }`}
+          >
             {puzzleLetters.map((row, rowIndex) => (
-              <View key={rowIndex} className="flex-row mb-4">
+              <View
+                key={rowIndex}
+                className={`flex-row ${
+                  Platform.OS === "android" ? "mb-2" : "mb-4"
+                }`}
+              >
                 {row.map((letter, colIndex) => {
                   const isSelected = selectedPositions.some(
                     (pos) => pos.row === rowIndex && pos.col === colIndex
@@ -336,7 +348,11 @@ function BasicGame() {
                   return (
                     <TouchableOpacity
                       key={`${rowIndex}-${colIndex}`}
-                      className={`w-[75px] h-[75px] rounded-md mx-2 items-center justify-center 
+                      className={`${
+                        Platform.OS === "android"
+                          ? "w-[65px] h-[65px] mx-1"
+                          : "w-[75px] h-[75px] mx-2"
+                      } rounded-md items-center justify-center 
                         ${isSelected ? "bg-[#FFBB32]" : "bg-[#FFF1B8]"}
                         shadow-inner`}
                       style={{
@@ -351,7 +367,11 @@ function BasicGame() {
                       }
                     >
                       <Text
-                        className={`text-[32px] font-instrument_bold ${
+                        className={`${
+                          Platform.OS === "android"
+                            ? "text-[28px]"
+                            : "text-[32px]"
+                        } font-instrument_bold ${
                           isSelected ? "text-white" : "text-[#666666]"
                         }`}
                       >
@@ -432,5 +452,3 @@ function BasicGame() {
     </SafeAreaView>
   );
 }
-
-export default BasicGame;

@@ -1,3 +1,4 @@
+// import "../config/firebase";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import "@/global.css";
 import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
@@ -8,11 +9,11 @@ import {
 } from "@react-navigation/native";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
-import * as SplashScreen from "expo-splash-screen";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect, useState } from "react";
 import "react-native-reanimated";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-
+import * as SplashScreen from "expo-splash-screen";
+import { authService } from "@/utils/authService";
 import { useColorScheme } from "@/components/useColorScheme";
 
 export {
@@ -57,40 +58,33 @@ export default function RootLayout() {
     return null;
   }
 
-  return (
-    <GluestackUIProvider mode="light">
-      <RootLayoutNav />
-    </GluestackUIProvider>
-  );
+  return <RootLayoutNav />;
 }
 
 function RootLayoutNav() {
-  const colorScheme = useColorScheme();
   const [initialRoute, setInitialRoute] = useState<string | null>(null);
 
   useEffect(() => {
-    const checkLoginStatus = async () => {
+    const checkAuthState = async () => {
       try {
-        const isLoggedIn = await AsyncStorage.getItem("loggedIn");
-        setInitialRoute(isLoggedIn === "true" ? "(tabs)" : "(auth)");
+        const isAuthenticated = await authService.checkAuth();
+        setInitialRoute(isAuthenticated ? "(tabs)" : "(auth)");
       } catch (error) {
-        console.error("Error checking login status:", error);
-        setInitialRoute("(auth)"); // Default to auth if there's an error
+        console.error("Auth state check failed:", error);
+        setInitialRoute("(auth)");
       }
     };
 
-    checkLoginStatus();
+    checkAuthState();
   }, []);
 
   if (initialRoute === null) return null;
 
   return (
-    <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-      <Stack initialRouteName={initialRoute}>
-        <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="(game-screens)" options={{ headerShown: false }} />
-      </Stack>
-    </ThemeProvider>
+    <Stack screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="(auth)" />
+      <Stack.Screen name="(tabs)" />
+      <Stack.Screen name="(game-screens)" />
+    </Stack>
   );
 }
