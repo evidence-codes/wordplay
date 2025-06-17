@@ -1,17 +1,24 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+// import { auth, db } from "../config/firebase";
 import { User } from "../types/auth";
 
 export const authService = {
-  async signup(userData: User): Promise<boolean> {
+  async signup(userData: Omit<User, "id">): Promise<boolean> {
     try {
-      // Check if user already exists
       const users = await this.getUsers();
+
+      // Check if email already exists
       if (users.some((user) => user.email === userData.email)) {
         return false;
       }
 
-      // Add new user
-      users.push(userData);
+      // Create new user with unique ID
+      const newUser = {
+        ...userData,
+        id: Date.now().toString(),
+      };
+
+      users.push(newUser);
       await AsyncStorage.setItem("users", JSON.stringify(users));
       return true;
     } catch (error) {
@@ -41,20 +48,9 @@ export const authService = {
 
   async logout(): Promise<void> {
     try {
-      await AsyncStorage.removeItem("currentUser");
-      await AsyncStorage.setItem("loggedIn", "false");
+      await AsyncStorage.multiRemove(["currentUser", "loggedIn"]);
     } catch (error) {
       console.error("Logout failed:", error);
-    }
-  },
-
-  async getUsers(): Promise<User[]> {
-    try {
-      const users = await AsyncStorage.getItem("users");
-      return users ? JSON.parse(users) : [];
-    } catch (error) {
-      console.error("Failed to get users:", error);
-      return [];
     }
   },
 
@@ -63,8 +59,27 @@ export const authService = {
       const userStr = await AsyncStorage.getItem("currentUser");
       return userStr ? JSON.parse(userStr) : null;
     } catch (error) {
-      console.error("Failed to get current user:", error);
+      console.error("Get current user failed:", error);
       return null;
+    }
+  },
+
+  async checkAuth(): Promise<boolean> {
+    try {
+      const isLoggedIn = await AsyncStorage.getItem("loggedIn");
+      return isLoggedIn === "true";
+    } catch (error) {
+      return false;
+    }
+  },
+
+  async getUsers(): Promise<User[]> {
+    try {
+      const users = await AsyncStorage.getItem("users");
+      return users ? JSON.parse(users) : [];
+    } catch (error) {
+      console.error("Get users failed:", error);
+      return [];
     }
   },
 };
