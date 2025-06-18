@@ -236,13 +236,125 @@
     }
   },
   "advanced": {
-    "EASE": {
-      "phonetics": "/iːz/",
+    "EASTWARD": {
+      "phonetics": "/ˈiːstwɑːd/",
+      "partOfSpeech": "adverb",
+      "definition": "Toward the east",
+      "example": "They continued their journey eastward.",
+      "synonyms": ["east", "easterly"],
+      "antonyms": ["westward", "westerly"]
+    },
+    "ADVANCED": {
+      "phonetics": "/ədˈvɑːnst/",
+      "partOfSpeech": "adjective",
+      "definition": "Far on or ahead in development or progress",
+      "example": "She took an advanced mathematics class.",
+      "synonyms": ["developed", "sophisticated", "progressive"],
+      "antonyms": ["basic", "elementary", "introductory"]
+    },
+    "EAGERLY": {
+      "phonetics": "/ˈiːɡəli/",
+      "partOfSpeech": "adverb",
+      "definition": "With a keen or enthusiastic desire or interest",
+      "example": "He eagerly awaited the results.",
+      "synonyms": ["keenly", "enthusiastically", "impatiently"],
+      "antonyms": ["reluctantly", "indifferently"]
+    },
+    "DIVERSE": {
+      "phonetics": "/daɪˈvɜːs/",
+      "partOfSpeech": "adjective",
+      "definition": "Showing a great deal of variety",
+      "example": "The team is made up of people from diverse backgrounds.",
+      "synonyms": ["varied", "different", "assorted"],
+      "antonyms": ["similar", "uniform", "identical"]
+    },
+    "ACCUSED": {
+      "phonetics": "/əˈkjuːzd/",
       "partOfSpeech": "noun",
-      "definition": "Absence of difficulty or effort",
-      "example": "She completed the task with ease",
-      "synonyms": ["comfort", "simplicity", "facility"],
-      "antonyms": ["difficulty", "hardship", "struggle"]
+      "definition": "A person or group of people who are charged with or on trial for a crime",
+      "example": "The accused was found not guilty.",
+      "synonyms": ["defendant", "suspect"],
+      "antonyms": ["accuser", "plaintiff"]
+    },
+    "ABROAD": {
+      "phonetics": "/əˈbrɔːd/",
+      "partOfSpeech": "adverb",
+      "definition": "In or to a foreign country",
+      "example": "She studied abroad in France.",
+      "synonyms": ["overseas", "internationally"],
+      "antonyms": ["domestically", "home"]
+    },
+    "COUNT": {
+      "phonetics": "/kaʊnt/",
+      "partOfSpeech": "verb",
+      "definition": "Determine the total number of something",
+      "example": "Please count the number of chairs in the room.",
+      "synonyms": ["enumerate", "tally", "calculate"],
+      "antonyms": ["estimate", "guess"]
+    },
+    "DISCI": {
+      "phonetics": "/ˈdɪskaɪ/",
+      "partOfSpeech": "noun",
+      "definition": "Plural form of 'discus', a heavy disc thrown in athletic competitions",
+      "example": "The athletes practiced throwing their disci for the upcoming event.",
+      "synonyms": ["discus throws", "discus"],
+      "antonyms": []
+    },
+    "GIRTH": {
+      "phonetics": "/ɡɜːθ/",
+      "partOfSpeech": "noun",
+      "definition": "The measurement around the middle of something, especially a person's waist",
+      "example": "The tree had an impressive girth.",
+      "synonyms": ["circumference", "width", "perimeter"],
+      "antonyms": ["thinness", "narrowness"]
+    },
+    "EARTH": {
+      "phonetics": "/ɜːθ/",
+      "partOfSpeech": "noun",
+      "definition": "The planet we live on; the world",
+      "example": "The Earth revolves around the sun.",
+      "synonyms": ["globe", "world", "planet"],
+      "antonyms": []
+    },
+    "VEER": {
+      "phonetics": "/vɪə(r)/",
+      "partOfSpeech": "verb",
+      "definition": "Change direction suddenly",
+      "example": "The car veered off the road.",
+      "synonyms": ["swerve", "diverge", "deviate"],
+      "antonyms": ["continue", "stay", "remain"]
+    },
+    "CITE": {
+      "phonetics": "/saɪt/",
+      "partOfSpeech": "verb",
+      "definition": "Refer to (a passage, book, or author) as evidence",
+      "example": "The article cited several studies on climate change.",
+      "synonyms": ["quote", "refer", "mention"],
+      "antonyms": ["ignore", "withhold"]
+    },
+    "IDEA": {
+      "phonetics": "/aɪˈdɪə/",
+      "partOfSpeech": "noun",
+      "definition": "A thought or suggestion as to a possible course of action",
+      "example": "She came up with a great idea for the project.",
+      "synonyms": ["thought", "concept", "notion"],
+      "antonyms": ["reality", "fact"]
+    },
+    "DATE": {
+      "phonetics": "/deɪt/",
+      "partOfSpeech": "noun",
+      "definition": "A particular day of the month or year",
+      "example": "What is today’s date?",
+      "synonyms": ["day", "occasion", "time"],
+      "antonyms": []
+    },
+    "CEDE": {
+      "phonetics": "/siːd/",
+      "partOfSpeech": "verb",
+      "definition": "Give up power or territory",
+      "example": "The country was forced to cede part of its territory.",
+      "synonyms": ["surrender", "yield", "relinquish"],
+      "antonyms": ["retain", "keep", "withhold"]
     }
   }
 }
