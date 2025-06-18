@@ -15,6 +15,10 @@ export default function Puzzle() {
   const handleStartBasic = () => {
     router.navigate("/(tabs)/puzzle/basic");
   };
+
+  const handleStartModerate = () => {
+    router.navigate("/(tabs)/puzzle/moderate");
+  };
   return (
     <SafeAreaView className="bg-white flex-1">
       <View className="bg-[#3E3BEE]">
@@ -93,7 +97,7 @@ export default function Puzzle() {
                 words, synonyms, and antonyms that help expand your vocabulary
                 and understanding of word relationships.
               </Text>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={handleStartModerate}>
                 <View
                   className={`w-[120px] rounded-[5px] bg-[#3E3BEE] ${
                     Platform.OS === "android" ? "mb-2" : ""

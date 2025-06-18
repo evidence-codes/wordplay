@@ -3,6 +3,7 @@ export interface User {
   fullName: string;
   email: string;
   password: string;
+  profileImage?: string;
 }
 
 export interface UserProgress {

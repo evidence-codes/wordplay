@@ -12,7 +12,7 @@ export interface UserProgress {
 }
 
 export const XP_LIMITS = {
-  basic: 225,
-  moderate: 500,
+  basic: 675,
+  moderate: 975,
   advanced: 1000,
 };

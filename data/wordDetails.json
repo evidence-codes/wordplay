@@ -1,0 +1,248 @@
+{
+  "basic": {
+    "EASE": {
+      "phonetics": "/iːz/",
+      "partOfSpeech": "noun",
+      "definition": "Absence of difficulty or effort",
+      "example": "She completed the task with ease",
+      "synonyms": ["comfort", "simplicity", "facility"],
+      "antonyms": ["difficulty", "hardship", "struggle"]
+    },
+    "TEAM": {
+      "phonetics": "/tiːm/",
+      "partOfSpeech": "noun",
+      "definition": "A group of people working together",
+      "example": "Our team won the championship",
+      "synonyms": ["group", "crew", "squad"],
+      "antonyms": ["individual", "solo"]
+    },
+    "THIS": {
+      "phonetics": "/ðɪs/",
+      "partOfSpeech": "pronoun",
+      "definition": "Used to identify a specific person or thing close at hand",
+      "example": "This is my favorite book",
+      "synonyms": ["that", "these"],
+      "antonyms": []
+    },
+    "SEAS": {
+      "phonetics": "/siːz/",
+      "partOfSpeech": "noun (plural)",
+      "definition": "Large bodies of saltwater",
+      "example": "The sailor crossed many seas",
+      "synonyms": ["oceans", "waters"],
+      "antonyms": ["land"]
+    },
+    "MATS": {
+      "phonetics": "/mæts/",
+      "partOfSpeech": "noun (plural)",
+      "definition": "Pieces of fabric or material used on floors",
+      "example": "Place the mats at the entrance",
+      "synonyms": ["rugs", "covers"],
+      "antonyms": []
+    },
+    "STAT": {
+      "phonetics": "/stæt/",
+      "partOfSpeech": "noun",
+      "definition": "A statistic or piece of data",
+      "example": "He checked the player’s stat",
+      "synonyms": ["figure", "number"],
+      "antonyms": []
+    },
+    "SEA": {
+      "phonetics": "/siː/",
+      "partOfSpeech": "noun",
+      "definition": "A large body of saltwater",
+      "example": "We swam in the sea",
+      "synonyms": ["ocean", "marine"],
+      "antonyms": ["land"]
+    },
+    "TEA": {
+      "phonetics": "/tiː/",
+      "partOfSpeech": "noun",
+      "definition": "A hot drink made by infusing leaves",
+      "example": "She drank a cup of tea",
+      "synonyms": ["brew", "chai"],
+      "antonyms": []
+    },
+    "HIS": {
+      "phonetics": "/hɪz/",
+      "partOfSpeech": "pronoun",
+      "definition": "Belonging to or associated with a male person",
+      "example": "That is his car",
+      "synonyms": [],
+      "antonyms": []
+    },
+    "MAT": {
+      "phonetics": "/mæt/",
+      "partOfSpeech": "noun",
+      "definition": "A piece of fabric or other material used on a floor or other flat surface",
+      "example": "The mat was dirty",
+      "synonyms": ["rug", "pad"],
+      "antonyms": []
+    },
+    "TAT": {
+      "phonetics": "/tæt/",
+      "partOfSpeech": "noun",
+      "definition": "Cheap or tasteless stuff",
+      "example": "The market was full of tat",
+      "synonyms": ["junk", "trash"],
+      "antonyms": ["treasure", "valuables"]
+    },
+    "AT": {
+      "phonetics": "/æt/",
+      "partOfSpeech": "preposition",
+      "definition": "Used to indicate a location or time",
+      "example": "She is at school",
+      "synonyms": [],
+      "antonyms": []
+    },
+    "AS": {
+      "phonetics": "/æz/",
+      "partOfSpeech": "conjunction",
+      "definition": "Used to indicate comparison or time",
+      "example": "She sang as he played",
+      "synonyms": ["like", "while"],
+      "antonyms": []
+    },
+    "AM": {
+      "phonetics": "/æm/",
+      "partOfSpeech": "verb",
+      "definition": "First person singular present of ‘be’",
+      "example": "I am happy",
+      "synonyms": [],
+      "antonyms": []
+    },
+    "HE": {
+      "phonetics": "/hiː/",
+      "partOfSpeech": "pronoun",
+      "definition": "Used to refer to a male person",
+      "example": "He is my friend",
+      "synonyms": [],
+      "antonyms": []
+    }
+  },
+  "moderate": {
+    "LAUNCH": {
+      "phonetics": "/lɔːntʃ/",
+      "partOfSpeech": "verb",
+      "definition": "To start or set in motion",
+      "example": "They will launch the new product next week",
+      "synonyms": ["begin", "initiate", "start"],
+      "antonyms": ["end", "conclude", "finish"]
+    },
+    "APPLE": {
+      "phonetics": "/ˈæp.əl/",
+      "partOfSpeech": "noun",
+      "definition": "A round fruit with red, green, or yellow skin",
+      "example": "She ate a green apple",
+      "synonyms": ["fruit"],
+      "antonyms": []
+    },
+    "LARK": {
+      "phonetics": "/lɑːrk/",
+      "partOfSpeech": "noun",
+      "definition": "A small singing bird",
+      "example": "The lark sang at dawn",
+      "synonyms": ["songbird"],
+      "antonyms": []
+    },
+    "ROUSE": {
+      "phonetics": "/raʊz/",
+      "partOfSpeech": "verb",
+      "definition": "To wake or become active",
+      "example": "He was roused from his sleep",
+      "synonyms": ["wake", "stir", "awaken"],
+      "antonyms": ["calm", "sleep", "still"]
+    },
+    "ROUSED": {
+      "phonetics": "/raʊzd/",
+      "partOfSpeech": "verb (past)",
+      "definition": "Past tense of 'rouse'",
+      "example": "She roused the team to action",
+      "synonyms": ["awakened", "alerted"],
+      "antonyms": ["lulled", "soothed"]
+    },
+    "ARCH": {
+      "phonetics": "/ɑːrtʃ/",
+      "partOfSpeech": "noun",
+      "definition": "A curved structure",
+      "example": "They walked under the stone arch",
+      "synonyms": ["curve", "vault"],
+      "antonyms": ["line", "flat"]
+    },
+    "ISLE": {
+      "phonetics": "/aɪl/",
+      "partOfSpeech": "noun",
+      "definition": "A small island",
+      "example": "They vacationed on a tropical isle",
+      "synonyms": ["island", "cay", "key"],
+      "antonyms": ["mainland"]
+    },
+    "SANE": {
+      "phonetics": "/seɪn/",
+      "partOfSpeech": "adjective",
+      "definition": "Having a healthy mind",
+      "example": "He remained sane under pressure",
+      "synonyms": ["sound", "stable", "rational"],
+      "antonyms": ["insane", "irrational"]
+    },
+    "DIRT": {
+      "phonetics": "/dɜːrt/",
+      "partOfSpeech": "noun",
+      "definition": "Earth or soil",
+      "example": "He washed the dirt off his hands",
+      "synonyms": ["soil", "mud"],
+      "antonyms": ["cleanliness", "purity"]
+    },
+    "ARK": {
+      "phonetics": "/ɑːrk/",
+      "partOfSpeech": "noun",
+      "definition": "A large boat or vessel",
+      "example": "Noah built an ark",
+      "synonyms": ["vessel", "ship"],
+      "antonyms": []
+    },
+    "STASH": {
+      "phonetics": "/stæʃ/",
+      "partOfSpeech": "verb",
+      "definition": "To store something safely",
+      "example": "He stashed money under the bed",
+      "synonyms": ["hide", "store", "hoard"],
+      "antonyms": ["expose", "reveal"]
+    },
+    "LAZY": {
+      "phonetics": "/ˈleɪ.zi/",
+      "partOfSpeech": "adjective",
+      "definition": "Unwilling to work or use effort",
+      "example": "He's too lazy to clean up",
+      "synonyms": ["idle", "sluggish"],
+      "antonyms": ["active", "energetic"]
+    },
+    "PUSH": {
+      "phonetics": "/pʊʃ/",
+      "partOfSpeech": "verb",
+      "definition": "To apply force to move something away",
+      "example": "Push the door open",
+      "synonyms": ["shove", "thrust"],
+      "antonyms": ["pull"]
+    },
+    "MARCH": {
+      "phonetics": "/mɑːrtʃ/",
+      "partOfSpeech": "verb",
+      "definition": "To walk with regular steps",
+      "example": "The soldiers marched in formation",
+      "synonyms": ["stride", "tread"],
+      "antonyms": ["wander", "stumble"]
+    }
+  },
+  "advanced": {
+    "EASE": {
+      "phonetics": "/iːz/",
+      "partOfSpeech": "noun",
+      "definition": "Absence of difficulty or effort",
+      "example": "She completed the task with ease",
+      "synonyms": ["comfort", "simplicity", "facility"],
+      "antonyms": ["difficulty", "hardship", "struggle"]
+    }
+  }
+}

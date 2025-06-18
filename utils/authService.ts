@@ -82,4 +82,21 @@ export const authService = {
       return [];
     }
   },
+
+  async updateUser(updatedUser: User): Promise<boolean> {
+    try {
+      const users = await this.getUsers();
+      const index = users.findIndex((u) => u.id === updatedUser.id);
+
+      if (index === -1) return false;
+
+      users[index] = updatedUser;
+      await AsyncStorage.setItem("users", JSON.stringify(users));
+      await AsyncStorage.setItem("currentUser", JSON.stringify(updatedUser));
+      return true;
+    } catch (error) {
+      console.error("Update user failed:", error);
+      return false;
+    }
+  },
 };

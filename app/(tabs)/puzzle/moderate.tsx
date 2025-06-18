@@ -18,34 +18,33 @@ import GameModal from "@/components/GameModal"; // Adjust the import based on yo
 import { progressService } from "@/utils/progressService"; // Adjust the import based on your file structure
 import { vocabularyService } from "@/utils/vocabularyService";
 
-// Update the word list with 2-4 letter words
+// Update the word list with 6-letter words
 const wordList = [
-  // 4 letters
-  "EASE",
-  "TEAM",
-  "THIS",
-  "SEAS",
-  "MATS",
-  "STAT",
-  // 3 letters
-  "SEA",
-  "TEA",
-  "HIS",
-  "MAT",
-  "TAT",
-  // 2 letters
-  "AT",
-  "AS",
-  "AM",
-  "HE",
+  "LAUNCH",
+  "APPLE",
+  "LARK",
+  "ROUSE",
+  "ROUSED",
+  "ARCH",
+  "ISLE",
+  "SANE",
+  "DIRT",
+  "ARK",
+  "STASH",
+  "LAZY",
+  "SANE",
+  "PUSH",
+  "MARCH",
 ];
 
-// Scramble the letters while maintaining valid words
+// Create a 6x6
 const puzzleLetters = [
-  ["T", "H", "I", "S"],
-  ["E", "A", "S", "E"],
-  ["A", "S", "T", "A"],
-  ["M", "A", "T", "S"],
+  ["L", "A", "Z", "Y", "Q", "E"],
+  ["A", "A", "P", "P", "L", "E"],
+  ["R", "O", "U", "S", "E", "D"],
+  ["K", "S", "I", "N", "I", "E"],
+  ["H", "M", "A", "R", "C", "H"],
+  ["A", "S", "T", "A", "S", "H"],
 ];
 
 type Direction = "horizontal" | "vertical" | "diagonal" | "none";
@@ -95,7 +94,7 @@ const isValidMove = (
   return newDirection === currentDirection;
 };
 
-const BasicGame = () => {
+export default function ModerateGame() {
   const router = useRouter();
   const [selectedLetters, setSelectedLetters] = useState<string[]>([]);
   const [selectedCoords, setSelectedCoords] = useState<
@@ -117,9 +116,8 @@ const BasicGame = () => {
   const [startTime] = useState<number>(Date.now());
   const [endTime, setEndTime] = useState<number | null>(null);
 
-  // Update the handleLetterPress function
   const handleLetterPress = (letter: string, row: number, col: number) => {
-    if (selectedLetters.length >= 4) return;
+    if (selectedLetters.length >= 6) return; // Keep at 6 for moderate level
 
     const newPosition = { row, col };
     const isValid = isValidMove(
@@ -148,12 +146,12 @@ const BasicGame = () => {
 
     // Check if word is valid
     const currentWord = newSelectedLetters.join("");
-    if (newSelectedLetters.length >= 2 && checkWord(currentWord)) {
+    if (newSelectedLetters.length >= 3 && checkWord(currentWord)) {
       if (!validWords.includes(currentWord)) {
         setValidWords((prev) => [...prev, currentWord]);
-        setScore((prev) => prev + currentWord.length * 25);
+        setScore((prev) => prev + currentWord.length * 35);
         // Store the word
-        vocabularyService.storeWord(currentWord, "basic");
+        vocabularyService.storeWord(currentWord, "moderate");
       }
     }
 
@@ -171,7 +169,7 @@ const BasicGame = () => {
 
   // Update the checkWord function
   const checkWord = (word: string): boolean => {
-    if (word.length < 2 || word.length > 4) return false;
+    if (word.length < 3 || word.length > 6) return false; // Check length constraints
     const forward = word;
     const backward = word.split("").reverse().join("");
     return wordList.includes(forward) || wordList.includes(backward);
@@ -179,7 +177,7 @@ const BasicGame = () => {
 
   // Then update the useEffect hook
   useEffect(() => {
-    if (selectedLetters.length === 4) {
+    if (selectedLetters.length === 6) {
       // Changed from 4 to 6
       if (selectionTimer) {
         clearTimeout(selectionTimer);
@@ -211,9 +209,10 @@ const BasicGame = () => {
   // Add this helper function to handle reset
   const resetSelection = () => {
     setSelectedLetters([]);
+    setSelectedCoords([]);
     setSelectedPositions([]);
     setCurrentDirection("none");
-    setWord(""); // Clear the word display
+    setWord("");
     if (selectionTimer) {
       clearTimeout(selectionTimer);
       setSelectionTimer(null);
@@ -244,13 +243,13 @@ const BasicGame = () => {
 
   // Update the handleSubmit function
   const handleSubmit = () => {
-    if (selectedLetters.length < 2) return; // Minimum 2 letters for basic
+    if (selectedLetters.length < 3) return; // Minimum 3 letters
 
     const word = selectedLetters.join("");
     if (checkWord(word)) {
       if (!validWords.includes(word)) {
         setValidWords((prev) => [...prev, word]);
-        setScore((prev) => prev + word.length * 25);
+        setScore((prev) => prev + word.length * 35);
       }
     }
     resetSelection();
@@ -355,7 +354,7 @@ const BasicGame = () => {
 
           {/* Selected Word */}
           <View
-            className={`w-[210px] h-[50px] rounded-[5px] mx-auto ${
+            className={`w-[280px] h-[50px] rounded-[5px] mx-auto ${
               Platform.OS === "android" ? "mb-2" : "mb-4"
             } ${
               word && checkWord(word) ? "bg-[#FFBB32]" : "bg-[#666666]"
@@ -514,6 +513,4 @@ const BasicGame = () => {
       </ImageBackground>
     </SafeAreaView>
   );
-};
-
-export default BasicGame;
+}
