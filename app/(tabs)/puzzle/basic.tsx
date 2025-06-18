@@ -288,8 +288,8 @@ const BasicGame = () => {
   };
 
   const handleGameComplete = async () => {
-    const gameXP = validWords.length * 75; // Increased XP per word for moderate level
-    await progressService.updateXP("moderate", gameXP);
+    const gameXP = validWords.length * 45; // Increased XP per word for moderate level
+    await progressService.updateXP("basic", gameXP);
     await progressService.updateStreak();
   };
 
@@ -317,7 +317,7 @@ const BasicGame = () => {
     <SafeAreaView className="flex-1 bg-white">
       <View className="bg-[#3E3BEE] flex-row items-center">
         <Text className="text-[30px] font-instrument_bold text-center text-white flex-1 px-6 py-12">
-          Moderate Vocabulary
+          Basic Vocabulary
         </Text>
       </View>
 
@@ -348,7 +348,7 @@ const BasicGame = () => {
             <View className="flex-row items-center gap-2">
               <Text className="text-[24px]">⭐</Text>
               <Text className="text-[16px] font-instrument_semibold text-[#3E3BEE]">
-                + {validWords.length * 65} XP
+                + {validWords.length * 45} XP
               </Text>
             </View>
           </View>

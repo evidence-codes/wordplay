@@ -287,7 +287,7 @@ export default function ModerateGame() {
   };
 
   const handleGameComplete = async () => {
-    const gameXP = validWords.length * 75; // Increased XP per word for moderate level
+    const gameXP = validWords.length * 65; // Increased XP per word for moderate level
     await progressService.updateXP("moderate", gameXP);
     await progressService.updateStreak();
   };
