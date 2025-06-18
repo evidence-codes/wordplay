@@ -19,6 +19,10 @@ export default function Puzzle() {
   const handleStartModerate = () => {
     router.navigate("/(tabs)/puzzle/moderate");
   };
+
+  const handleStartAdvanced = () => {
+    router.navigate("/(tabs)/puzzle/advanced");
+  };
   return (
     <SafeAreaView className="bg-white flex-1">
       <View className="bg-[#3E3BEE]">
@@ -137,7 +141,7 @@ export default function Puzzle() {
                 rare, academic, or complex vocabulary, with a focus on
                 precision, phonetics, and contextual understanding.
               </Text>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={handleStartAdvanced}>
                 <View
                   className={`w-[120px] rounded-[5px] bg-[#3E3BEE] ${
                     Platform.OS === "android" ? "mb-2" : ""

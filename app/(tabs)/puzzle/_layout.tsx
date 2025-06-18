@@ -6,6 +6,7 @@ export default function PuzzleLayout() {
       <Stack.Screen name="index" />
       <Stack.Screen name="basic" />
       <Stack.Screen name="moderate" />
+      <Stack.Screen name="advanced" />
     </Stack>
   );
 }
