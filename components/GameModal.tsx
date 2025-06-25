@@ -1,3 +1,4 @@
+import React from "react";
 import {
   Modal,
   View,
@@ -15,7 +16,6 @@ const { width } = Dimensions.get("window");
 type ModalProps = {
   visible: boolean;
   onClose: () => void;
-  score: number;
   validWords: string[];
   isSuccess?: boolean;
   timeTaken?: string;
@@ -24,7 +24,6 @@ type ModalProps = {
 const GameModal = ({
   visible,
   onClose,
-  score,
   validWords,
   isSuccess = false,
   timeTaken,

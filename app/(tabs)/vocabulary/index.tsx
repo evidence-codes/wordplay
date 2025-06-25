@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import {
   SafeAreaView,
   View,
@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import { useRouter } from "expo-router";
 import { vocabularyService } from "@/utils/vocabularyService";
+import { useVocabularyStore } from "@/components/ui/gluestack-ui-provider";
 
 type WordEntry = {
   word: string;
@@ -16,17 +17,10 @@ type WordEntry = {
 
 export default function Vocabulary() {
   const router = useRouter();
-
-  const [words, setWords] = useState<{
-    basic: WordEntry[];
-    moderate: WordEntry[];
-    advanced: WordEntry[];
-  }>({
-    basic: [],
-    moderate: [],
-    advanced: [],
-  });
-  const [favorites, setFavorites] = useState<string[]>([]);
+  const words = useVocabularyStore((state) => state.words);
+  const setWords = useVocabularyStore((state) => state.setWords);
+  const favorites = useVocabularyStore((state) => state.favorites);
+  const setFavorites = useVocabularyStore((state) => state.setFavorites);
 
   useEffect(() => {
     loadWords();

@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { vocabularyService } from "@/utils/vocabularyService";
+import { useVocabularyStore } from "@/components/ui/gluestack-ui-provider";
 
 type WordDetails = {
   word: string;
@@ -30,6 +31,9 @@ export default function WordDetailsScreen() {
   const [details, setDetails] = useState<WordDetails | null>(null);
   const [loading, setLoading] = useState(true);
   const [difficulty, setDifficulty] = useState<Difficulty | null>(null);
+  const toggleFavoriteStore = useVocabularyStore(
+    (state) => state.toggleFavorite
+  );
 
   useEffect(() => {
     loadWordDetails();
@@ -52,6 +56,7 @@ export default function WordDetailsScreen() {
     if (!details) return;
     try {
       await vocabularyService.toggleFavorite(details.word);
+      toggleFavoriteStore(details.word);
       setDetails((prev) =>
         prev ? { ...prev, isFavorite: !prev.isFavorite } : null
       );

@@ -10,6 +10,7 @@ import {
   Modal,
   Image,
   Platform,
+  Animated,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import Svg, { Path } from "react-native-svg";
@@ -95,6 +96,9 @@ const isValidMove = (
   return newDirection === currentDirection;
 };
 
+const XP_PER_WORD = 45;
+const HINT_PENALTY = 30;
+
 const BasicGame = () => {
   const router = useRouter();
   const [selectedLetters, setSelectedLetters] = useState<string[]>([]);
@@ -102,7 +106,6 @@ const BasicGame = () => {
     { x: number; y: number }[]
   >([]);
   const [word, setWord] = useState<string>("");
-  const [score, setScore] = useState<number>(0);
   const [validWords, setValidWords] = useState<string[]>([]);
   const [selectedPositions, setSelectedPositions] = useState<Position[]>([]);
   const [currentDirection, setCurrentDirection] = useState<Direction>("none");
@@ -116,6 +119,9 @@ const BasicGame = () => {
   const [timeLeft, setTimeLeft] = useState(300); // 5 minutes in seconds
   const [startTime] = useState<number>(Date.now());
   const [endTime, setEndTime] = useState<number | null>(null);
+  const [currentXP, setCurrentXP] = useState(0);
+  const [showXPDeduction, setShowXPDeduction] = useState(false);
+  const [xpDeductionAnim] = useState(new Animated.Value(0));
 
   // Update the handleLetterPress function
   const handleLetterPress = (letter: string, row: number, col: number) => {
@@ -151,7 +157,6 @@ const BasicGame = () => {
     if (newSelectedLetters.length >= 2 && checkWord(currentWord)) {
       if (!validWords.includes(currentWord)) {
         setValidWords((prev) => [...prev, currentWord]);
-        setScore((prev) => prev + currentWord.length * 25);
         // Store the word
         vocabularyService.storeWord(currentWord, "basic");
       }
@@ -192,7 +197,6 @@ const BasicGame = () => {
       if (checkWord(word)) {
         if (!validWords.includes(word)) {
           setValidWords((prev) => [...prev, word]);
-          setScore((prev) => prev + 150); // Increased score for moderate level
         }
       } else {
         // Clear the word display for invalid words
@@ -229,16 +233,25 @@ const BasicGame = () => {
   };
 
   // Update the handleHint function
-  const handleHint = () => {
-    // Only allow 2 hints
+  const handleHint = async () => {
     if (hintsUsed >= 2) return;
-
     const hint = getRandomHint();
     if (hint) {
       setHints((prev) => [...prev, hint]);
       setHintsUsed((prev) => prev + 1);
-      // Deduct points for using hint
-      setScore((prev) => Math.max(0, prev - 50));
+      // Deduct XP for using hint
+      setCurrentXP((prev) => Math.max(0, prev - HINT_PENALTY));
+      // Animate XP deduction
+      setShowXPDeduction(true);
+      xpDeductionAnim.setValue(1);
+      Animated.timing(xpDeductionAnim, {
+        toValue: 0,
+        duration: 1200,
+        useNativeDriver: true,
+      }).start(() => setShowXPDeduction(false));
+      const xp =
+        validWords.length * XP_PER_WORD - (hintsUsed + 1) * HINT_PENALTY;
+      await progressService.updateXP("basic", Math.max(0, xp));
     }
   };
 
@@ -250,7 +263,6 @@ const BasicGame = () => {
     if (checkWord(word)) {
       if (!validWords.includes(word)) {
         setValidWords((prev) => [...prev, word]);
-        setScore((prev) => prev + word.length * 25);
       }
     }
     resetSelection();
@@ -288,8 +300,8 @@ const BasicGame = () => {
   };
 
   const handleGameComplete = async () => {
-    const gameXP = validWords.length * 45; // Increased XP per word for moderate level
-    await progressService.updateXP("basic", gameXP);
+    const xp = validWords.length * XP_PER_WORD - hintsUsed * HINT_PENALTY;
+    await progressService.updateXP("basic", Math.max(0, xp));
     await progressService.updateStreak();
   };
 
@@ -312,6 +324,10 @@ const BasicGame = () => {
       secondsTaken
     ).padStart(2, "0")}`;
   };
+
+  useEffect(() => {
+    setCurrentXP(validWords.length * XP_PER_WORD - hintsUsed * HINT_PENALTY);
+  }, [validWords, hintsUsed]);
 
   return (
     <SafeAreaView className="flex-1 bg-white">
@@ -340,16 +356,31 @@ const BasicGame = () => {
               </Text>
             </View>
             <View className="flex-row items-center gap-2">
-              <Text className="text-[24px]">🧮</Text>
-              <Text className="text-[16px] font-instrument_semibold text-[#3E3BEE]">
-                {score}
-              </Text>
-            </View>
-            <View className="flex-row items-center gap-2">
               <Text className="text-[24px]">⭐</Text>
               <Text className="text-[16px] font-instrument_semibold text-[#3E3BEE]">
-                + {validWords.length * 45} XP
+                + {currentXP} XP
               </Text>
+              {showXPDeduction && (
+                <Animated.Text
+                  style={{
+                    color: "#FF1214",
+                    fontWeight: "bold",
+                    marginLeft: 8,
+                    opacity: xpDeductionAnim,
+                    transform: [
+                      {
+                        translateY: xpDeductionAnim.interpolate({
+                          inputRange: [0, 1],
+                          outputRange: [-10, 0],
+                        }),
+                      },
+                    ],
+                  }}
+                  className="text-[16px]"
+                >
+                  -{HINT_PENALTY} XP
+                </Animated.Text>
+              )}
             </View>
           </View>
 
@@ -427,9 +458,11 @@ const BasicGame = () => {
             <TouchableOpacity
               onPress={handleHint}
               className={`px-6 py-2 rounded-full ${
-                hintsUsed >= 2 ? "bg-[#CCCCCC]" : "bg-[#3E3BEE]"
+                hintsUsed >= 2 || getRandomHint() === ""
+                  ? "bg-[#CCCCCC]"
+                  : "bg-[#3E3BEE]"
               }`}
-              disabled={hintsUsed >= 2}
+              disabled={hintsUsed >= 2 || getRandomHint() === ""}
             >
               <View className="flex-row items-center gap-2">
                 <Text className="text-[20px]">💡</Text>
@@ -493,7 +526,6 @@ const BasicGame = () => {
               setShowSuccessModal(false);
               router.back();
             }}
-            score={score}
             validWords={validWords}
             isSuccess={true}
             timeTaken={calculateTimeTaken()}
@@ -505,10 +537,9 @@ const BasicGame = () => {
               setShowTimeUpModal(false);
               router.back();
             }}
-            score={score}
             validWords={validWords}
             isSuccess={false}
-            timeTaken={formatTime(300 - timeLeft)} // Shows actual time taken before timeout
+            timeTaken={formatTime(300 - timeLeft)}
           />
         </View>
       </ImageBackground>

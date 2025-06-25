@@ -15,11 +15,15 @@ import { progressService } from "@/utils/progressService";
 import { User } from "@/types/auth";
 import { UserProgress, XP_LIMITS } from "@/types/progress";
 import { useRouter } from "expo-router";
+import { useUserStore } from "@/components/ui/gluestack-ui-provider";
 
 export default function Profile() {
   const router = useRouter();
-  const [user, setUser] = useState<User | null>(null);
-  const [progress, setProgress] = useState<UserProgress | null>(null);
+  const user = useUserStore((state) => state.user);
+  const setUser = useUserStore((state) => state.setUser);
+  const updateUser = useUserStore((state) => state.updateUser);
+  const progress = useUserStore((state) => state.progress);
+  const setProgress = useUserStore((state) => state.setProgress);
   const [isEditing, setIsEditing] = useState(false);
   const [newName, setNewName] = useState("");
 
@@ -60,12 +64,10 @@ export default function Profile() {
 
   const handleSaveProfile = async () => {
     if (!user) return;
-
     const updatedUser = {
       ...user,
       fullName: newName,
     };
-
     await authService.updateUser(updatedUser);
     setUser(updatedUser);
     setIsEditing(false);
@@ -79,7 +81,6 @@ export default function Profile() {
         aspect: [1, 1],
         quality: 1,
       });
-
       if (!result.canceled && result.assets[0].uri) {
         const updatedUser = {
           ...user!,
