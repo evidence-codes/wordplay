@@ -1,5 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { UserProgress } from "../types/auth";
+import { useUserStore } from "@/components/ui/gluestack-ui-provider";
 
 export const progressService = {
   async getProgress(): Promise<UserProgress> {
@@ -20,6 +21,9 @@ export const progressService = {
       progress.levelXP[level] = Math.max(progress.levelXP[level], newXP);
       progress.totalXP = this.calculateTotalXP(progress.levelXP);
       await this.saveProgress(progress);
+      // Update Zustand store
+      const setProgress = useUserStore.getState().setProgress;
+      setProgress(progress);
     } catch (error) {
       console.error("Update XP failed:", error);
     }
@@ -44,6 +48,9 @@ export const progressService = {
 
       progress.lastPlayedDate = today;
       await this.saveProgress(progress);
+      // Update Zustand store
+      const setProgress = useUserStore.getState().setProgress;
+      setProgress(progress);
     } catch (error) {
       console.error("Update streak failed:", error);
     }

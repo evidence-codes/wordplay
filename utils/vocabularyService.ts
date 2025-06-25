@@ -1,5 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import wordDetailsData from "../data/wordDetails.json";
+import { useVocabularyStore } from "@/components/ui/gluestack-ui-provider";
 
 type WordDetailEntry = {
   phonetics: string;
@@ -55,6 +56,12 @@ export const vocabularyService = {
         };
         existingWords.push(newEntry);
         await AsyncStorage.setItem(key, JSON.stringify(existingWords));
+        // Update Zustand store
+        const setWords = useVocabularyStore.getState().setWords;
+        const allWords = await this.getAllWords();
+        setWords(allWords);
+        const addWord = useVocabularyStore.getState().addWord;
+        addWord(word, difficulty);
       }
     } catch (error) {
       console.error("Error storing word:", error);
@@ -79,7 +86,9 @@ export const vocabularyService = {
         this.getWordsByDifficulty("moderate"),
         this.getWordsByDifficulty("advanced"),
       ]);
-
+      // Update Zustand store
+      const setWords = useVocabularyStore.getState().setWords;
+      setWords({ basic, moderate, advanced });
       return {
         basic,
         moderate,
@@ -150,6 +159,11 @@ export const vocabularyService = {
       }
 
       await AsyncStorage.setItem(key, JSON.stringify(favorites));
+      // Update Zustand store
+      const setFavorites = useVocabularyStore.getState().setFavorites;
+      setFavorites(favorites);
+      const toggleFavorite = useVocabularyStore.getState().toggleFavorite;
+      toggleFavorite(word);
     } catch (error) {
       throw error;
     }
@@ -170,7 +184,11 @@ export const vocabularyService = {
     try {
       const key = "@favorites";
       const favoritesStr = await AsyncStorage.getItem(key);
-      return favoritesStr ? JSON.parse(favoritesStr) : [];
+      const favorites = favoritesStr ? JSON.parse(favoritesStr) : [];
+      // Update Zustand store
+      const setFavorites = useVocabularyStore.getState().setFavorites;
+      setFavorites(favorites);
+      return favorites;
     } catch (error) {
       console.error("Error getting favorites:", error);
       return [];

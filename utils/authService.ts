@@ -1,6 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 // import { auth, db } from "../config/firebase";
 import { User } from "../types/auth";
+import { useUserStore } from "@/components/ui/gluestack-ui-provider";
 
 export const authService = {
   async signup(userData: Omit<User, "id">): Promise<boolean> {
@@ -37,6 +38,9 @@ export const authService = {
       if (user) {
         await AsyncStorage.setItem("currentUser", JSON.stringify(user));
         await AsyncStorage.setItem("loggedIn", "true");
+        // Update Zustand store
+        const setUser = useUserStore.getState().setUser;
+        setUser(user);
         return true;
       }
       return false;
@@ -49,6 +53,9 @@ export const authService = {
   async logout(): Promise<void> {
     try {
       await AsyncStorage.multiRemove(["currentUser", "loggedIn"]);
+      // Update Zustand store
+      const setUser = useUserStore.getState().setUser;
+      setUser(null);
     } catch (error) {
       console.error("Logout failed:", error);
     }
@@ -93,6 +100,9 @@ export const authService = {
       users[index] = updatedUser;
       await AsyncStorage.setItem("users", JSON.stringify(users));
       await AsyncStorage.setItem("currentUser", JSON.stringify(updatedUser));
+      // Update Zustand store
+      const setUser = useUserStore.getState().setUser;
+      setUser(updatedUser);
       return true;
     } catch (error) {
       console.error("Update user failed:", error);
