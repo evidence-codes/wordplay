@@ -175,9 +175,7 @@ export default function ModerateGame() {
   // Update the checkWord function
   const checkWord = (word: string): boolean => {
     if (word.length < 3 || word.length > 6) return false; // Check length constraints
-    const forward = word;
-    const backward = word.split("").reverse().join("");
-    return wordList.includes(forward) || wordList.includes(backward);
+    return wordList.includes(word);
   };
 
   // Then update the useEffect hook

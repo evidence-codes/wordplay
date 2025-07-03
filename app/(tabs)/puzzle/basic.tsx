@@ -177,9 +177,7 @@ const BasicGame = () => {
   // Update the checkWord function
   const checkWord = (word: string): boolean => {
     if (word.length < 2 || word.length > 4) return false;
-    const forward = word;
-    const backward = word.split("").reverse().join("");
-    return wordList.includes(forward) || wordList.includes(backward);
+    return wordList.includes(word);
   };
 
   // Then update the useEffect hook
