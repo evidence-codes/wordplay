@@ -56,6 +56,31 @@ export const progressService = {
     }
   },
 
+  async getLastPlayedBoard(
+    level: "basic" | "moderate" | "advanced"
+  ): Promise<number> {
+    try {
+      const key = `lastPlayedBoard_${level}`;
+      const lastBoard = await AsyncStorage.getItem(key);
+      return lastBoard ? parseInt(lastBoard) : -1;
+    } catch (error) {
+      console.error("Get last played board failed:", error);
+      return -1;
+    }
+  },
+
+  async setLastPlayedBoard(
+    level: "basic" | "moderate" | "advanced",
+    boardIndex: number
+  ): Promise<void> {
+    try {
+      const key = `lastPlayedBoard_${level}`;
+      await AsyncStorage.setItem(key, boardIndex.toString());
+    } catch (error) {
+      console.error("Set last played board failed:", error);
+    }
+  },
+
   getDefaultProgress(): UserProgress {
     return {
       totalXP: 0,

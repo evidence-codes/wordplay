@@ -11,10 +11,10 @@ import { useClientOnlyValue } from "@/components/useClientOnlyValue";
 
 // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
 function TabBarIcon(props: {
-  name: React.ComponentProps<typeof Ionicons>["name"];
+  name: React.ComponentProps<typeof FontAwesome>["name"];
   color: string;
 }) {
-  return <Ionicons size={28} style={{ marginBottom: -3 }} {...props} />;
+  return <FontAwesome size={28} style={{ marginBottom: -3 }} {...props} />;
 }
 
 export default function TabLayout() {
@@ -63,7 +63,7 @@ export default function TabLayout() {
           options={{
             title: "Puzzle",
             tabBarIcon: ({ color }) => (
-              <TabBarIcon name="extension-puzzle" color={color} />
+              <TabBarIcon name="puzzle-piece" color={color} />
             ),
             headerShown: false,
           }}
@@ -81,7 +81,7 @@ export default function TabLayout() {
           options={{
             title: "Profile",
             tabBarIcon: ({ color }) => (
-              <TabBarIcon name="person-circle" color={color} />
+              <TabBarIcon name="user-circle" color={color} />
             ),
             headerShown: false,
           }}

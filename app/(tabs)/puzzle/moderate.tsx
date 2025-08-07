@@ -38,14 +38,62 @@ const wordList = [
   "MARCH",
 ];
 
-// Create a 6x6
-const puzzleLetters = [
-  ["L", "A", "Z", "Y", "Q", "E"],
-  ["A", "A", "P", "P", "L", "E"],
-  ["R", "O", "U", "S", "E", "D"],
-  ["K", "S", "I", "N", "I", "E"],
-  ["H", "M", "A", "R", "C", "H"],
-  ["A", "S", "T", "A", "S", "H"],
+// Multiple puzzle boards for moderate level
+const puzzleBoards = [
+  // Board 1
+  [
+    ["L", "A", "Z", "Y", "Q", "E"],
+    ["A", "A", "P", "P", "L", "E"],
+    ["R", "O", "U", "S", "E", "D"],
+    ["K", "S", "I", "N", "I", "E"],
+    ["H", "M", "A", "R", "C", "H"],
+    ["A", "S", "T", "A", "S", "H"],
+  ],
+  // Board 2
+  [
+    ["A", "H", "K", "R", "A", "L"],
+    ["S", "M", "S", "O", "A", "A"],
+    ["T", "A", "I", "U", "P", "Z"],
+    ["A", "R", "N", "S", "P", "Y"],
+    ["S", "C", "I", "E", "L", "Q"],
+    ["H", "H", "E", "D", "E", "E"],
+  ],
+  // Board 3
+  [
+    ["H", "S", "A", "T", "S", "A"],
+    ["H", "C", "R", "A", "M", "H"],
+    ["E", "I", "N", "I", "S", "K"],
+    ["D", "E", "S", "U", "O", "R"],
+    ["E", "L", "P", "P", "A", "A"],
+    ["E", "Q", "Y", "Z", "A", "L"],
+  ],
+  // Board 4
+  [
+    ["E", "E", "D", "E", "H", "H"],
+    ["Q", "L", "E", "I", "C", "S"],
+    ["Y", "P", "S", "N", "R", "A"],
+    ["Z", "P", "U", "I", "A", "T"],
+    ["A", "A", "O", "S", "M", "S"],
+    ["L", "A", "R", "K", "H", "A"],
+  ],
+  // Board 5
+  // [
+  //   ["L", "A", "U", "N", "C", "H"],
+  //   ["A", "P", "P", "L", "E", "S"],
+  //   ["R", "O", "U", "S", "E", "D"],
+  //   ["K", "A", "R", "C", "H", "I"],
+  //   ["H", "S", "T", "A", "S", "H"],
+  //   ["A", "L", "A", "Z", "Y", "Q"],
+  // ],
+  // // Board 6
+  // [
+  //   ["S", "A", "N", "E", "D", "I"],
+  //   ["T", "A", "S", "H", "M", "R"],
+  //   ["A", "P", "P", "L", "E", "T"],
+  //   ["S", "H", "I", "S", "L", "E"],
+  //   ["H", "P", "U", "S", "H", "A"],
+  //   ["A", "L", "A", "R", "K", "H"],
+  // ],
 ];
 
 type Direction = "horizontal" | "vertical" | "diagonal" | "none";
@@ -121,6 +169,49 @@ export default function ModerateGame() {
   const [currentXP, setCurrentXP] = useState(0);
   const [showXPDeduction, setShowXPDeduction] = useState(false);
   const [xpDeductionAnim] = useState(new Animated.Value(0));
+  const [currentBoard, setCurrentBoard] = useState<string[][]>([]);
+  const [currentBoardIndex, setCurrentBoardIndex] = useState<number>(0);
+
+  // Initialize board selection on component mount
+  useEffect(() => {
+    const initializeBoard = async () => {
+      try {
+        const lastPlayedBoard = await progressService.getLastPlayedBoard(
+          "moderate"
+        );
+
+        // Get available boards (exclude the last played one)
+        const availableBoards = puzzleBoards
+          .map((board, index) => ({ board, index }))
+          .filter(({ index }) => index !== lastPlayedBoard);
+
+        // If all boards have been played, reset and use any board
+        if (availableBoards.length === 0) {
+          const randomIndex = Math.floor(Math.random() * puzzleBoards.length);
+          setCurrentBoard(puzzleBoards[randomIndex]);
+          setCurrentBoardIndex(randomIndex);
+          await progressService.setLastPlayedBoard("moderate", randomIndex);
+        } else {
+          // Pick a random board from available ones
+          const randomBoardData =
+            availableBoards[Math.floor(Math.random() * availableBoards.length)];
+          setCurrentBoard(randomBoardData.board);
+          setCurrentBoardIndex(randomBoardData.index);
+          await progressService.setLastPlayedBoard(
+            "moderate",
+            randomBoardData.index
+          );
+        }
+      } catch (error) {
+        console.error("Failed to initialize board:", error);
+        // Fallback to first board
+        setCurrentBoard(puzzleBoards[0]);
+        setCurrentBoardIndex(0);
+      }
+    };
+
+    initializeBoard();
+  }, []);
 
   const handleLetterPress = (letter: string, row: number, col: number) => {
     if (selectedLetters.length >= 6) return; // Keep at 6 for moderate level
@@ -161,15 +252,16 @@ export default function ModerateGame() {
     }
 
     const timer = setTimeout(resetSelection, 2000);
-    setSelectionTimer(timer);
+    setSelectionTimer(timer as unknown as NodeJS.Timeout);
   };
 
   const handleLayout = (event: LayoutChangeEvent, row: number, col: number) => {
     const { x, y, width, height } = event.nativeEvent.layout;
-    tileRefs.current[`${row}-${col}`] = {
-      x: x + width / 2,
-      y: y + height / 2,
-    };
+    // Remove tileRefs usage since it's not defined
+    // tileRefs.current[`${row}-${col}`] = {
+    //   x: x + width / 2,
+    //   y: y + height / 2,
+    // };
   };
 
   // Update the checkWord function
@@ -324,6 +416,24 @@ export default function ModerateGame() {
     setCurrentXP(validWords.length * XP_PER_WORD - hintsUsed * HINT_PENALTY);
   }, [validWords, hintsUsed]);
 
+  // Don't render until board is loaded
+  if (currentBoard.length === 0) {
+    return (
+      <SafeAreaView className="flex-1 bg-white">
+        <View className="bg-[#3E3BEE] flex-row items-center">
+          <Text className="text-[30px] font-instrument_bold text-center text-white flex-1 px-6 py-12">
+            Moderate Vocabulary
+          </Text>
+        </View>
+        <View className="flex-1 justify-center items-center">
+          <Text className="text-[18px] font-instrument_regular text-[#666666]">
+            Loading puzzle...
+          </Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
+
   return (
     <SafeAreaView className="flex-1 bg-white">
       <View className="bg-[#3E3BEE] flex-row items-center">
@@ -398,7 +508,7 @@ export default function ModerateGame() {
               Platform.OS === "android" ? "mt-4" : "mt-8"
             }`}
           >
-            {puzzleLetters.map((row, rowIndex) => (
+            {currentBoard.map((row, rowIndex) => (
               <View
                 key={rowIndex}
                 className={`flex-row ${
@@ -470,9 +580,9 @@ export default function ModerateGame() {
             <TouchableOpacity
               onPress={handleSubmit}
               className={`px-6 py-2 rounded-full ${
-                selectedLetters.length === 6 ? "bg-[#FFBB32]" : "bg-[#CCCCCC]"
+                selectedLetters.length >= 3 ? "bg-[#FFBB32]" : "bg-[#CCCCCC]"
               }`}
-              disabled={selectedLetters.length !== 6}
+              disabled={selectedLetters.length < 3}
             >
               <Text className="text-white font-instrument_semibold">
                 Submit

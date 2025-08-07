@@ -38,16 +38,74 @@ const wordList = [
   "CEDE",
 ];
 
-// Create a 8x8
-const puzzleLetters = [
-  ["A", "Y", "L", "R", "E", "G", "A", "E"],
-  ["C", "D", "I", "S", "C", "I", "A", "A"],
-  ["C", "A", "V", "E", "E", "R", "A", "S"],
-  ["U", "T", "D", "A", "T", "T", "I", "T"],
-  ["S", "E", "T", "H", "N", "H", "I", "W"],
-  ["E", "T", "N", "U", "O", "C", "D", "A"],
-  ["D", "I", "V", "E", "R", "S", "E", "R"],
-  ["O", "C", "A", "B", "R", "O", "A", "D"],
+// Multiple puzzle boards for advanced level
+const puzzleBoards = [
+  // Board 1
+  [
+    ["A", "Y", "L", "R", "E", "G", "A", "E"],
+    ["C", "D", "I", "S", "C", "I", "A", "A"],
+    ["C", "A", "V", "E", "E", "R", "A", "S"],
+    ["U", "T", "D", "A", "T", "T", "I", "T"],
+    ["S", "E", "T", "H", "N", "H", "I", "W"],
+    ["E", "T", "N", "U", "O", "C", "D", "A"],
+    ["D", "I", "V", "E", "R", "S", "E", "R"],
+    ["O", "C", "A", "B", "R", "O", "A", "D"],
+  ],
+  // Board 2
+  [
+    ["O", "D", "E", "S", "U", "C", "C", "A"],
+    ["C", "I", "T", "E", "T", "A", "D", "Y"],
+    ["A", "V", "N", "T", "D", "V", "I", "L"],
+    ["B", "E", "U", "H", "A", "E", "S", "R"],
+    ["R", "R", "O", "N", "T", "E", "C", "E"],
+    ["O", "S", "C", "H", "T", "R", "I", "G"],
+    ["A", "E", "D", "I", "I", "A", "A", "A"],
+    ["D", "R", "A", "W", "T", "S", "A", "E"],
+  ],
+  // Board 3
+  [
+    ["D", "A", "O", "R", "B", "A", "C", "O"],
+    ["R", "E", "S", "R", "E", "V", "I", "D"],
+    ["A", "D", "C", "O", "U", "N", "T", "E"],
+    ["W", "I", "H", "N", "H", "T", "E", "S"],
+    ["T", "I", "T", "T", "A", "D", "T", "U"],
+    ["S", "A", "R", "E", "E", "V", "A", "C"],
+    ["A", "A", "I", "C", "S", "I", "D", "C"],
+    ["E", "A", "G", "E", "R", "L", "Y", "A"],
+  ],
+  // Board 4
+  [
+    ["E", "A", "S", "T", "W", "A", "R", "D"],
+    ["A", "A", "A", "I", "I", "D", "E", "A"],
+    ["G", "I", "R", "T", "H", "C", "S", "O"],
+    ["E", "C", "E", "T", "N", "O", "R", "R"],
+    ["R", "S", "E", "A", "H", "U", "E", "B"],
+    ["L", "I", "V", "D", "T", "N", "V", "A"],
+    ["Y", "D", "A", "T", "E", "T", "I", "C"],
+    ["A", "C", "C", "U", "S", "E", "D", "O"],
+  ],
+  // Board 5
+  // [
+  //   ["E", "A", "R", "T", "H", "V", "E", "E"],
+  //   ["V", "E", "E", "R", "C", "I", "T", "E"],
+  //   ["E", "C", "I", "T", "E", "I", "D", "E"],
+  //   ["R", "I", "D", "E", "A", "D", "A", "T"],
+  //   ["C", "D", "A", "T", "E", "C", "E", "D"],
+  //   ["I", "E", "C", "E", "D", "E", "A", "S"],
+  //   ["T", "S", "T", "W", "A", "R", "D", "S"],
+  //   ["E", "A", "D", "V", "A", "N", "C", "E"],
+  // ],
+  // // Board 6
+  // [
+  //   ["E", "A", "G", "E", "R", "L", "Y", "A"],
+  //   ["D", "I", "V", "E", "R", "S", "E", "D"],
+  //   ["A", "C", "C", "U", "S", "E", "D", "A"],
+  //   ["B", "R", "O", "A", "D", "A", "C", "O"],
+  //   ["U", "N", "T", "I", "S", "D", "I", "S"],
+  //   ["C", "I", "P", "L", "G", "I", "R", "T"],
+  //   ["H", "E", "A", "R", "T", "H", "V", "E"],
+  //   ["E", "R", "C", "I", "T", "E", "I", "D"],
+  // ],
 ];
 
 type Direction = "horizontal" | "vertical" | "diagonal" | "none";
@@ -123,6 +181,49 @@ export default function AdvancedGame() {
   const [currentXP, setCurrentXP] = useState(0);
   const [showXPDeduction, setShowXPDeduction] = useState(false);
   const [xpDeductionAnim] = useState(new Animated.Value(0));
+  const [currentBoard, setCurrentBoard] = useState<string[][]>([]);
+  const [currentBoardIndex, setCurrentBoardIndex] = useState<number>(0);
+
+  // Initialize board selection on component mount
+  useEffect(() => {
+    const initializeBoard = async () => {
+      try {
+        const lastPlayedBoard = await progressService.getLastPlayedBoard(
+          "advanced"
+        );
+
+        // Get available boards (exclude the last played one)
+        const availableBoards = puzzleBoards
+          .map((board, index) => ({ board, index }))
+          .filter(({ index }) => index !== lastPlayedBoard);
+
+        // If all boards have been played, reset and use any board
+        if (availableBoards.length === 0) {
+          const randomIndex = Math.floor(Math.random() * puzzleBoards.length);
+          setCurrentBoard(puzzleBoards[randomIndex]);
+          setCurrentBoardIndex(randomIndex);
+          await progressService.setLastPlayedBoard("advanced", randomIndex);
+        } else {
+          // Pick a random board from available ones
+          const randomBoardData =
+            availableBoards[Math.floor(Math.random() * availableBoards.length)];
+          setCurrentBoard(randomBoardData.board);
+          setCurrentBoardIndex(randomBoardData.index);
+          await progressService.setLastPlayedBoard(
+            "advanced",
+            randomBoardData.index
+          );
+        }
+      } catch (error) {
+        console.error("Failed to initialize board:", error);
+        // Fallback to first board
+        setCurrentBoard(puzzleBoards[0]);
+        setCurrentBoardIndex(0);
+      }
+    };
+
+    initializeBoard();
+  }, []);
 
   const handleLetterPress = (letter: string, row: number, col: number) => {
     if (selectedLetters.length >= 8) return; // Keep at 8 for advanced level
@@ -163,15 +264,16 @@ export default function AdvancedGame() {
     }
 
     const timer = setTimeout(resetSelection, 2000);
-    setSelectionTimer(timer);
+    setSelectionTimer(timer as unknown as NodeJS.Timeout);
   };
 
   const handleLayout = (event: LayoutChangeEvent, row: number, col: number) => {
     const { x, y, width, height } = event.nativeEvent.layout;
-    tileRefs.current[`${row}-${col}`] = {
-      x: x + width / 2,
-      y: y + height / 2,
-    };
+    // Remove tileRefs usage since it's not defined
+    // tileRefs.current[`${row}-${col}`] = {
+    //   x: x + width / 2,
+    //   y: y + height / 2,
+    // };
   };
 
   // Update the checkWord function
@@ -254,7 +356,7 @@ export default function AdvancedGame() {
 
   // Update the handleSubmit function
   const handleSubmit = () => {
-    if (selectedLetters.length < 4) return; // Minimum 3 letters
+    if (selectedLetters.length < 4) return; // Minimum 4 letters for advanced
 
     const word = selectedLetters.join("");
     if (checkWord(word)) {
@@ -325,6 +427,24 @@ export default function AdvancedGame() {
   useEffect(() => {
     setCurrentXP(validWords.length * XP_PER_WORD - hintsUsed * HINT_PENALTY);
   }, [validWords, hintsUsed]);
+
+  // Don't render until board is loaded
+  if (currentBoard.length === 0) {
+    return (
+      <SafeAreaView className="flex-1 bg-white">
+        <View className="bg-[#3E3BEE] flex-row items-center">
+          <Text className="text-[30px] font-instrument_bold text-center text-white flex-1 px-6 py-12">
+            Advanced Vocabulary
+          </Text>
+        </View>
+        <View className="flex-1 justify-center items-center">
+          <Text className="text-[18px] font-instrument_regular text-[#666666]">
+            Loading puzzle...
+          </Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView className="flex-1 bg-white">
@@ -400,7 +520,7 @@ export default function AdvancedGame() {
               Platform.OS === "android" ? "mt-4" : "mt-8"
             }`}
           >
-            {puzzleLetters.map((row, rowIndex) => (
+            {currentBoard.map((row, rowIndex) => (
               <View
                 key={rowIndex}
                 className={`flex-row ${
@@ -435,8 +555,8 @@ export default function AdvancedGame() {
                       <Text
                         className={`${
                           Platform.OS === "android"
-                            ? "text-[20px]" // Smaller font for Android
-                            : "text-[24px]" // Smaller font for iOS
+                            ? "text-[16px]" // Smaller font for Android 8x8
+                            : "text-[20px]" // Smaller font for iOS 8x8
                         } font-instrument_bold ${
                           isSelected ? "text-white" : "text-[#666666]"
                         }`}
@@ -472,9 +592,9 @@ export default function AdvancedGame() {
             <TouchableOpacity
               onPress={handleSubmit}
               className={`px-6 py-2 rounded-full ${
-                selectedLetters.length === 6 ? "bg-[#FFBB32]" : "bg-[#CCCCCC]"
+                selectedLetters.length >= 4 ? "bg-[#FFBB32]" : "bg-[#CCCCCC]"
               }`}
-              disabled={selectedLetters.length !== 6}
+              disabled={selectedLetters.length < 4}
             >
               <Text className="text-white font-instrument_semibold">
                 Submit

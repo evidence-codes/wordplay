@@ -41,12 +41,50 @@ const wordList = [
   "HE",
 ];
 
-// Scramble the letters while maintaining valid words
-const puzzleLetters = [
-  ["T", "H", "I", "S"],
-  ["E", "A", "S", "E"],
-  ["A", "S", "T", "A"],
-  ["M", "A", "T", "S"],
+// Multiple puzzle boards - each board has different letter arrangements
+const puzzleBoards = [
+  // Board 1
+  [
+    ["T", "H", "I", "S"],
+    ["E", "A", "S", "E"],
+    ["A", "S", "T", "A"],
+    ["M", "A", "T", "S"],
+  ],
+  // Board 2
+  [
+    ["M", "A", "E", "T"],
+    ["A", "S", "A", "H"],
+    ["T", "T", "S", "I"],
+    ["S", "A", "E", "S"],
+  ],
+  // Board 3
+  [
+    ["S", "T", "A", "M"],
+    ["A", "T", "S", "A"],
+    ["E", "S", "A", "E"],
+    ["S", "I", "H", "T"],
+  ],
+  // Board 4
+  [
+    ["S", "E", "A", "S"],
+    ["I", "S", "T", "T"],
+    ["H", "A", "S", "A"],
+    ["T", "E", "A", "M"],
+  ],
+  // Board 5
+  // [
+  //   ["S", "A", "E", "S"],
+  //   ["T", "E", "A", "M"],
+  //   ["A", "T", "A", "T"],
+  //   ["H", "I", "S", "S"],
+  // ],
+  // // Board 6
+  // [
+  //   ["M", "A", "T", "S"],
+  //   ["E", "A", "S", "E"],
+  //   ["T", "H", "I", "S"],
+  //   ["A", "S", "T", "A"],
+  // ],
 ];
 
 type Direction = "horizontal" | "vertical" | "diagonal" | "none";
@@ -122,6 +160,49 @@ const BasicGame = () => {
   const [currentXP, setCurrentXP] = useState(0);
   const [showXPDeduction, setShowXPDeduction] = useState(false);
   const [xpDeductionAnim] = useState(new Animated.Value(0));
+  const [currentBoard, setCurrentBoard] = useState<string[][]>([]);
+  const [currentBoardIndex, setCurrentBoardIndex] = useState<number>(0);
+
+  // Initialize board selection on component mount
+  useEffect(() => {
+    const initializeBoard = async () => {
+      try {
+        const lastPlayedBoard = await progressService.getLastPlayedBoard(
+          "basic"
+        );
+
+        // Get available boards (exclude the last played one)
+        const availableBoards = puzzleBoards
+          .map((board, index) => ({ board, index }))
+          .filter(({ index }) => index !== lastPlayedBoard);
+
+        // If all boards have been played, reset and use any board
+        if (availableBoards.length === 0) {
+          const randomIndex = Math.floor(Math.random() * puzzleBoards.length);
+          setCurrentBoard(puzzleBoards[randomIndex]);
+          setCurrentBoardIndex(randomIndex);
+          await progressService.setLastPlayedBoard("basic", randomIndex);
+        } else {
+          // Pick a random board from available ones
+          const randomBoardData =
+            availableBoards[Math.floor(Math.random() * availableBoards.length)];
+          setCurrentBoard(randomBoardData.board);
+          setCurrentBoardIndex(randomBoardData.index);
+          await progressService.setLastPlayedBoard(
+            "basic",
+            randomBoardData.index
+          );
+        }
+      } catch (error) {
+        console.error("Failed to initialize board:", error);
+        // Fallback to first board
+        setCurrentBoard(puzzleBoards[0]);
+        setCurrentBoardIndex(0);
+      }
+    };
+
+    initializeBoard();
+  }, []);
 
   // Update the handleLetterPress function
   const handleLetterPress = (letter: string, row: number, col: number) => {
@@ -163,15 +244,16 @@ const BasicGame = () => {
     }
 
     const timer = setTimeout(resetSelection, 2000);
-    setSelectionTimer(timer);
+    setSelectionTimer(timer as unknown as NodeJS.Timeout);
   };
 
   const handleLayout = (event: LayoutChangeEvent, row: number, col: number) => {
     const { x, y, width, height } = event.nativeEvent.layout;
-    tileRefs.current[`${row}-${col}`] = {
-      x: x + width / 2,
-      y: y + height / 2,
-    };
+    // Remove tileRefs usage since it's not defined
+    // tileRefs.current[`${row}-${col}`] = {
+    //   x: x + width / 2,
+    //   y: y + height / 2,
+    // };
   };
 
   // Update the checkWord function
@@ -327,6 +409,24 @@ const BasicGame = () => {
     setCurrentXP(validWords.length * XP_PER_WORD - hintsUsed * HINT_PENALTY);
   }, [validWords, hintsUsed]);
 
+  // Don't render until board is loaded
+  if (currentBoard.length === 0) {
+    return (
+      <SafeAreaView className="flex-1 bg-white">
+        <View className="bg-[#3E3BEE] flex-row items-center">
+          <Text className="text-[30px] font-instrument_bold text-center text-white flex-1 px-6 py-12">
+            Basic Vocabulary
+          </Text>
+        </View>
+        <View className="flex-1 justify-center items-center">
+          <Text className="text-[18px] font-instrument_regular text-[#666666]">
+            Loading puzzle...
+          </Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
+
   return (
     <SafeAreaView className="flex-1 bg-white">
       <View className="bg-[#3E3BEE] flex-row items-center">
@@ -401,7 +501,7 @@ const BasicGame = () => {
               Platform.OS === "android" ? "mt-4" : "mt-8"
             }`}
           >
-            {puzzleLetters.map((row, rowIndex) => (
+            {currentBoard.map((row, rowIndex) => (
               <View
                 key={rowIndex}
                 className={`flex-row ${
@@ -473,9 +573,9 @@ const BasicGame = () => {
             <TouchableOpacity
               onPress={handleSubmit}
               className={`px-6 py-2 rounded-full ${
-                selectedLetters.length === 6 ? "bg-[#FFBB32]" : "bg-[#CCCCCC]"
+                selectedLetters.length >= 2 ? "bg-[#FFBB32]" : "bg-[#CCCCCC]"
               }`}
-              disabled={selectedLetters.length !== 6}
+              disabled={selectedLetters.length < 2}
             >
               <Text className="text-white font-instrument_semibold">
                 Submit
